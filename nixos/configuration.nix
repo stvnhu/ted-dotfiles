@@ -16,6 +16,7 @@ devenv
 discord
 fzf
 git
+gnome-boxes
 gotop
 gparted
 grim   # Screenshots
@@ -46,8 +47,9 @@ vlc
 vscode
 wget
 whitenoise
+yt-dlp
 zathura   # pdf viewer 
-zotero
+#zotero
 ];
   
 # Bootloader.
@@ -165,7 +167,7 @@ users.defaultUserShell = pkgs.zsh;
 users.users.ted = {
     isNormalUser = true;
     description  = "ted";
-    extraGroups  = [ "networkmanager" "wheel" "audio" ];
+    extraGroups  = [ "networkmanager" "wheel" "audio" "libvirtd" ];
 };
 
 # Firefox.
@@ -177,7 +179,17 @@ nixpkgs.config.allowUnfree = true;
 # Allow flatpacks.
 services.flatpak.enable = true;
 # The following is then required: "flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo && flatpak update"
-  
+
+# Virtual Machine stuff.
+virtualisation.libvirtd = {
+  enable = true;
+  qemu = {
+    package = pkgs.qemu_kvm;
+    runAsRoot = true;
+    swtpm.enable = true;
+  };
+};
+
 # Global colour scheme.
 stylix = {
     enable = true;

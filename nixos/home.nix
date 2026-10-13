@@ -1,8 +1,7 @@
 { pkgs, lib, config, ... }:
 let
     dotfiles    = "${config.home.homeDirectory}/dotfiles";
-    symlink     = path: config.lib.file.mkOutOfStoreSymlink path;
-    hyprlandLua = builtins.readFile ./hyprland.lua; colors = config.lib.stylix.colors;
+    colors = config.lib.stylix.colors;
 in
 {
 home = {
@@ -16,7 +15,7 @@ programs.home-manager.enable = true;
 home.sessionVariables = {};
 
 imports = [
-
+  ./modules
 ];
  
 ##############
@@ -38,74 +37,12 @@ programs.ranger = {
 };
 
 ###########
-### ZSH ###
-###########
-programs.zsh = {
-    enable = true;
-    autosuggestion.enable = true;
-    shellAliases = {
-        de        = "trans de:";
-        nixrb     = "sudo nixos-rebuild switch --flake ~/dotfiles/nixos";
-        onbattery = "hyprctl eval 'hl.monitor({ output = \"eDP-1\", mode = \"3072x1920@60\", position = \"0x0\", scale = 2 })'";
-        oncharge  = "hyprctl eval 'hl.monitor({ output = \"eDP-1\", mode = \"3072x1920@165\", position = \"0x0\", scale = 2 })'";
-    };
-    siteFunctions = {
-        latex = ''
-            vim "$1.tex" | zathura "$1.pdf"
-        '';
-    };
-};
-
-###########
 ### Fzf ###
 ###########
 programs.fzf = {
     enable               = true;
     enableZshIntegration = true;
     };
-
-##############
-### Neovim ###
-##############
-programs.neovim = {
-  enable = true;
-  defaultEditor = true;
-  initLua = ''
-    vim.opt.number = true
-    vim.opt.relativenumber = true
-    vim.opt.shiftwidth = 4
-    vim.opt.clipboard:append("unnamedplus")
-    vim.g.vimtex_view_method = "zathura"
-    vim.g.vimtex_compiler_method = "latexmk"
-    vim.g.vimtex_complete_enabled = 1
-    vim.g.vimtex_complete_close_braces = 1
-    vim.g.vimtex_quickfix_ignore_filters = {
-      'Package hyperref Warning: Token not allowed in a PDF string',
-      'Overfull \\hbox',
-    }
-  '';
-  plugins = with pkgs.vimPlugins; [ 
-    vimtex
-    vim-nix
-    blink-cmp
-    blink-cmp-latex
-  ];
-};
-
-#############
-### Kitty ###
-#############
-programs.kitty = {
-enable = true;
-extraConfig = ''
-    cursor_trail 10
-    map ctrl+backspace send_text all \x17
-'';
-keybindings = {
-    "ctrl+shift+left"  = "no_op";
-    "ctrl+shift+right" = "no_op";
-};
-};
 
 ################
 ### Noctalia ###
@@ -124,15 +61,16 @@ programs.noctalia = {
       
       widget_spacing = 10;
       margin_ends = 0;
-      color = "#39ddfd";
+      color = "#${colors.base05}";
       background_opacity = 0.0;
       shadow = false;
       reserve_space = false;
     };
 
     widget.workspaces = {
-      focused_color = "#39ddfd";
-      occupied_color = "#39ddfd";
+      focused_color = "#ffffff";
+      occupied_color = "#ffffff";
+      show_labels = false;
     };
 
     widget.clock = {
@@ -203,6 +141,9 @@ profiles.default.userSettings = {
 };
 };
 
+################
+### Hyprland ###
+################
 ################
 ### Hyprland ###
 ################
