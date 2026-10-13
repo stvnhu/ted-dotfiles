@@ -1,4 +1,8 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
+
+let
+  colors = config.lib.stylix.colors;
+in
 
 {
   programs.noctalia = {

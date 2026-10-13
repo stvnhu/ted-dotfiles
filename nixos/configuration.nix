@@ -12,7 +12,6 @@ nix.settings.experimental-features = [ "nix-command" "flakes" ];
 # Packages. 
 environment.systemPackages = with pkgs; [
 audacious   # MP3 Player
-devenv
 discord
 fzf
 git
